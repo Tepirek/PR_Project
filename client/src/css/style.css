@@ -1,6 +1,151 @@
 * {
-    margin: 0;
-    padding: 0;
+    margin: 0px;
+    padding: 0px;
     box-sizing: border-box;
+}
+
+body {
     background-color: #222222;
+    color: #ffffff;
+    font-size: 1.5rem;
+}
+
+.container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.game {
+    flex: 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    border: 1px solid greenyellow;
+}
+
+.gameBoard {
+    position: relative;
+    display: flex;
+    margin: 10px;
+}
+
+.gameOptions {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.buildings, .units, .chatButton {
+    text-align: center;
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid salmon;
+}
+
+.buildings:hover, .units:hover, .chatButton:hover {
+    background-color: salmon;
+    transition: 1s;
+}
+
+.buildings {
+    flex: 1 auto;
+}
+
+.units {
+    flex: 4 auto;
+}
+
+.chatButton {
+    flex: 1 auto;
+}
+
+.stats {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.stats ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content:flex-end;
+    border-bottom: 1px solid #ffee00;
+}
+
+.stats ul > li {
+    margin: 10px;
+}
+
+.chat {
+    position: absolute;
+    background-color: rgb(255, 255, 255);
+    margin: 20px;
+    border: 3px solid #4287f5;
+    color: #000000;
+}
+
+.chat input {
+    outline: none;
+    font-size: 1.0rem;
+    padding: 0 5px;
+}
+
+button {
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    padding: 3px 15px;
+    color: white;
+    line-height: 20px;
+    background-color: #4287f5;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.12) 0 1px 6px, rgba(0, 0, 0, 0.12) 0 1px 4px;
+    transition: all 150ms ease-in;
+    outline: none;
+}
+
+button:hover {
+    background-color: #083a8a;
+}
+
+.chat ul {
+    list-style: none;
+    overflow-y: scroll;
+}
+
+.chat ul > li {
+    padding: 5px;
+    margin: 0px 5px;
+    border-bottom: 1px solid #bababa;
+}
+
+.chat-wrapper {
+    padding: 10px;
+}
+
+.chat-wrapper form {
+    display: flex;
+}
+  
+.chat-wrapper form input {
+    width: 300px;
+    font-size: 1.0rem;
+    margin: 0 10px 0 0;
+    padding: 0 5px;
+    flex-grow: 1;
+}
+  
+.chat-wrapper form button {
+    width: 100px;
+}
+
+#events {
+    height: 30vh;
 }
