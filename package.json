@@ -1,0 +1,26 @@
+{
+  "name": "pr_project",
+  "version": "1.0.0",
+  "description": "2d game",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tepirek/PR_Project.git"
+  },
+  "author": "Arkadiusz Tepper, Tomasz Tomaszewski",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Tepirek/PR_Project/issues"
+  },
+  "homepage": "https://github.com/Tepirek/PR_Project#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^3.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
