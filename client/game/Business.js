@@ -3,7 +3,10 @@ class Business extends Building {
         super(posX, posY, tileSize, name, color, game, life, costs);
         this.workers = 0;
         this.capacity = capacity;
-        this.gameObject.onclick = (e) => this.showOptions();
+        this.gameObject.onclick = (res) => {
+            this.showOptions(res);
+        };
+
     };
 };
 
@@ -17,10 +20,13 @@ Business.prototype.addNewWorker = function() {
     } else console.log('You can\'t more workers!');
 }
 
+
+
 Business.prototype.highlight = function() {
+
 };
 
-Business.prototype.showOptions = function() {
+Business.prototype.showOptions = function(res) {
     const options = document.querySelector('.objectOptions');
     options.innerHTML = `
             ${this.name}
@@ -28,7 +34,7 @@ Business.prototype.showOptions = function() {
             <tr>
                 <td>Workers</td>
                 <td>${this.workers}/${this.capacity}</td>
-                <td><img src="../src/img/plus.png" alt="plus"></td>
+                <td><img id="addWorker" src="../src/img/plus.png" alt="plus"></td>
             </tr>
             <tr>
                 <td>Life</td>
@@ -36,4 +42,7 @@ Business.prototype.showOptions = function() {
             </tr>
         </table>
     `;
+    document.querySelector('#addWorker').onclick = () => {
+        this.game.addNewWorker(this);
+    }
 }

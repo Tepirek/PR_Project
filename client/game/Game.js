@@ -8,7 +8,62 @@ class Game {
         this.socket.on('game_init', (response) => {
             this.init(response);
         });
-    };
+        this.config = {
+            areaSize: 24,
+            width: 64,
+            height: 32
+        };
+        this.cost = {
+            tower: {
+                costs: {
+                    gold: 1,
+                    wood: 1,
+                    stone: 1,
+                    food: 1
+                }
+            },
+            farm: {
+                costs: {
+                    gold: 1,
+                    wood: 1,
+                    stone: 1,
+                    food: 1
+                }
+            },
+            mine: {
+                costs: {
+                    gold: 1,
+                    wood: 1,
+                    stone: 1,
+                    food: 1
+                }
+            },
+            quarry: {
+                costs: {
+                    gold: 1,
+                    wood: 1,
+                    stone: 1,
+                    food: 1
+                }
+            },
+            sawmill: {
+                costs: {
+                    gold: 1,
+                    wood: 1,
+                    stone: 1,
+                    food: 1
+                }
+            },
+            base: {
+                costs: {
+                    gold: 1,
+                    wood: 1,
+                    stone: 1,
+                    food: 1
+                }
+            }
+        };
+    }
 };
 
 Game.prototype.init = function(response) {
@@ -30,14 +85,13 @@ Game.prototype.init = function(response) {
             this.map[index] = area;
         }
     }
+    this.update();
 };
 
 Game.prototype.update = function() {
     setInterval(() => {
-        this.players.forEach(player => {
-            player.updateStats();
-            player.printStats();
-        });
+        this.player.addToStats();
+        this.player.printStats();
     }, 1000);
 };
 
@@ -56,17 +110,46 @@ Game.prototype.handleData = function(event) {
 };
 
 Game.prototype.addNewBuilding = function(position, target) {
-    const index = position.x*this.config.width + position.y;
-    const building = this.getBuilding(position, target);
-    this.map[index].setFree(false);
-    this.map[index].setObject(building);
-    delete this.map[index];
-    this.map[index] = building;
-    console.log(this.map[index]);
+    if(this.canBuy(target)){
+        const index = position.x*this.config.width + position.y;
+        const building = this.getBuilding(position, target);
+        this.map[index].setFree(false);
+        this.map[index].setObject(building);
+        delete this.map[index];
+        this.map[index] = building;
+        this.buy(target);
+        console.log(this.map[index]);
+    }
+    else {
+        const options = document.querySelector('.objectOptions');
+        options.innerHTML = `
+            <table>
+                <tr>
+                    <td>Masz za mało surowców!</td>
+                </tr>
+                <tr>
+                    <td>Nie ma nic za darmo!</td>
+                </tr>
+            </table>
+        `;
+    }
 };
 
-Game.prototype.addNewWorker = function() {
-    
+Game.prototype.addNewWorker = function(object) {
+    if(this.player.stats.food >= 25 && object.workers + 1 <= object.capacity) {
+        object.workers++;
+        this.player.workers[`${object.name.toLowerCase()}`]++;
+        this.player.stats.food -= 25;
+        // TODO: dodawanie surowców za pracowników
+        let key = '';
+        if(object.name == 'Farm') key = 'food';
+        else if(object.name == 'Sawmill') key = 'wood';
+        else if(object.name == 'Mine') key = 'gold';
+        else if(object.name == 'Quarry') key = 'stone';
+        this.player.workers[`${key}`]++;
+        this.player.printStats();
+        object.gameObject.click();
+    }
 };
 
 Game.prototype.getBuilding = function(position, target) {
@@ -85,4 +168,23 @@ Game.prototype.getBuilding = function(position, target) {
     else if(target == 'farm') building = new Farm(config);
     else if(target == 'base') building = new Base(config);
     return building;
+};
+
+Game.prototype.canBuy = function(target) {
+    let buy = true;
+    Object.entries(this.player.stats).forEach(entry => {
+        const [key, value] = entry;
+        if(parseInt(value) < parseInt(this.cost[`${target}`].costs[key])) {
+            buy = false;
+        }
+    });
+    return buy;
+};
+
+Game.prototype.buy = function(target) {
+    Object.entries(this.player.stats).forEach(entry => {
+        const [key, value] = entry;
+        this.player.stats[key] -= this.cost[`${target}`].costs[key];
+    });
+    this.player.printStats();
 };

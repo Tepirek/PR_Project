@@ -8,25 +8,9 @@ class GameObject {
         this.name = name;
         GameObject.prototype.color = color;
         GameObject.prototype.game = game;
-        this.gameObject = document.createElement('div');
-        this.gameObject.onmouseenter = (e) => this.mouseenter();
-        this.gameObject.onmouseleave = (e) => this.mouseleave();
+        this.gameObject = document.createElement('div');   
         this.draw();
     };
-};
-
-GameObject.prototype.mouseenter = function() {
-    let action = JSON.parse(localStorage.getItem('action'));
-    if(action.type == 'drag') {
-        this.gameObject.style.border = '3px solid #ff1f1f';
-    }
-};
-
-GameObject.prototype.mouseleave = function() {
-    let action = JSON.parse(localStorage.getItem('action'));
-    if(action.type != 'select') {
-        this.gameObject.style.border = '';
-    }
 };
 
 GameObject.prototype.draw = function() {

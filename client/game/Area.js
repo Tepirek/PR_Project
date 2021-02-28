@@ -5,7 +5,8 @@ class Area extends GameObject {
         this.object = undefined;
         this.type = 'grass';
         this.gameObject.onclick = (e) => this.click(); 
-
+        this.gameObject.onmouseenter = (e) => this.mouseenter();
+        this.gameObject.onmouseleave = (e) => this.mouseleave();
         this.gameObject.addEventListener('click', () => {
             if(this.type = 'grass') {
                 if(this.free) {
@@ -42,9 +43,24 @@ Area.prototype.isFree = function() {
 
 Area.prototype.setFree = function(value) {
     this.free = value;
-}
+};
 
 Area.prototype.setObject = function(object) {
     this.object = object;
     this.clear();
-}
+    //this.draw();
+};
+
+Area.prototype.mouseenter = function() {
+    let action = JSON.parse(localStorage.getItem('action'));
+    if(action.type == 'drag' && this.free) {
+        this.gameObject.style.border = '3px solid #ff1f1f';
+    }
+};
+
+Area.prototype.mouseleave = function() {
+    let action = JSON.parse(localStorage.getItem('action'));
+    if(action.type != 'select' && this.free) {
+        this.gameObject.style.border = '';
+    }
+};
