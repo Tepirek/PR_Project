@@ -48,16 +48,28 @@ io.on('connection', (sock) => {
         lobby.push(data);
         sock.emit('lobby_connected', data);
         io.to('lobby').emit('lobby_Players', lobby);
-        if(lobby.length == 2) {
+        if(lobby.length == 1) {
             console.log('Game init');
             console.log(players);
             io.emit('game_prepare', 'abc');
+
+            // GAME INIT
+            let map = Array();
+            for(let i = 0; i < 32; i++) {
+                for(let j = 0; j < 64; j++) {
+                    map[i*64 + j] = 0;
+                }
+            }
+            map[65] = 1;
+            gameParams.map = map;
+            console.log(gameParams);
+
             setTimeout(() => {
-                io.emit('game_init', gameParams);
                 Object.values(players).forEach(player => {
                     console.log(player);
                     io.to(player.id).emit('player_init', players[player.id]);
                 });
+                io.emit('game_init', gameParams);
             }, 1000);
         }
     });

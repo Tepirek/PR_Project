@@ -14,13 +14,20 @@ class Game {
 Game.prototype.init = function(response) {
     console.log(response);
     this.config = response.config;
+    this.map = response.map;
     this.gameBoard.style.width = `${this.config.width * this.config.areaSize}px`;
     this.gameBoard.style.height = `${this.config.height * this.config.areaSize}px`;
     this.gameOptions.style.width = `${this.config.width * this.config.areaSize}px`;
     for(let i = 0; i < this.config.height; i++) {
         for(let j = 0; j < this.config.width; j++) {
+            const index = i*this.config.width + j;
             let area = new Area(i, j, this.config.areaSize, 'grass', 1, this);
-            this.map[i*this.config.width + j] = area;
+            if(this.map[index]) {
+                this.map[index] = area;
+                const position = { x: i, y: j };
+                area = this.addNewBuilding(position, 'base');
+            }
+            this.map[index] = area;
         }
     }
 };
@@ -76,5 +83,6 @@ Game.prototype.getBuilding = function(position, target) {
     else if(target == 'sawmill') building = new Sawmill(config);
     else if(target == 'quarry') building = new Quarry(config);
     else if(target == 'farm') building = new Farm(config);
+    else if(target == 'base') building = new Base(config);
     return building;
 };

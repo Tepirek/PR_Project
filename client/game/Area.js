@@ -46,7 +46,5 @@ Area.prototype.setFree = function(value) {
 
 Area.prototype.setObject = function(object) {
     this.object = object;
-    this.image = object.image;
     this.clear();
-    //this.draw();
 }
