@@ -9,6 +9,48 @@ class Game {
             width: 64,
             height: 32
         };
+        this.cost = {
+            tower: {
+                costs: {
+                    gold: 1,
+                    wood: 1,
+                    stone: 1,
+                    food: 1
+                }
+            },
+            farm: {
+                costs: {
+                    gold: 1,
+                    wood: 1,
+                    stone: 1,
+                    food: 1
+                }
+            },
+            mine: {
+                costs: {
+                    gold: 1,
+                    wood: 1,
+                    stone: 1,
+                    food: 1
+                }
+            },
+            quarry: {
+                costs: {
+                    gold: 1,
+                    wood: 1,
+                    stone: 1,
+                    food: 1
+                }
+            },
+            sawmill: {
+                costs: {
+                    gold: 1,
+                    wood: 1,
+                    stone: 1,
+                    food: 1
+                }
+            }
+        };
     }
 };
 
@@ -51,13 +93,29 @@ Game.prototype.handleData = function(event) {
 };
 
 Game.prototype.addNewBuilding = function(position, target) {
-    const index = position.x*this.config.width + position.y;
-    const building = this.getBuilding(position, target);
-    this.map[index].setFree(false);
-    this.map[index].setObject(building);
-    delete this.map[index];
-    this.map[index] = building;
-    console.log(this.map[index]);
+    if(this.canBuy(target)){
+        const index = position.x*this.config.width + position.y;
+        const building = this.getBuilding(position, target);
+        this.map[index].setFree(false);
+        this.map[index].setObject(building);
+        delete this.map[index];
+        this.map[index] = building;
+        this.buy(target);
+        console.log(this.map[index]);
+    }
+    else {
+        const options = document.querySelector('.objectOptions');
+        options.innerHTML = `
+            <table>
+                <tr>
+                    <td>Masz za mało surowców!</td>
+                </tr>
+                <tr>
+                    <td>Nie ma nic za darmo!</td>
+                </tr>
+            </table>
+        `;
+    }
 };
 
 Game.prototype.addNewWorker = function() {
@@ -73,4 +131,27 @@ Game.prototype.getBuilding = function(position, target) {
     else if(target == 'quarry') building = new Quarry(config);
     else if(target == 'farm') building = new Farm(config);
     return building;
+};
+
+Game.prototype.canBuy = function(target) {
+    let buy = true;
+    let player = JSON.parse(localStorage.getItem('player'));
+    Object.entries(player.stats).forEach(entry => {
+        const [key, value] = entry;
+        if(value < this.cost[`${target}`].costs[key]) {
+            buy = false;
+        }
+    });
+    return buy;
+};
+
+Game.prototype.buy = function(target) {
+    let player = JSON.parse(localStorage.getItem('player'));
+    Object.entries(player.stats).forEach(entry => {
+        const [key, value] = entry;
+        player.stats[key] -= this.cost[`${target}`].costs[key];
+    });
+    localStorage.setItem('player',JSON.stringify(player));
+    player.updateStats();
+    player.printStats();
 };

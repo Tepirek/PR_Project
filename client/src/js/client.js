@@ -17,7 +17,7 @@
         const player = new Player('test', sock.id);
         localStorage.setItem('player', JSON.stringify(player));
     
-        const game = new Game();
+        const game = new Game(sock);
         game.addPlayer(player);
         game.init();
         game.update();

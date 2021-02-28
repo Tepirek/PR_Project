@@ -5,9 +5,9 @@ class Player {
         this.gameObjects = new Array();
         this.stats = {
             gold: 50,
-            wood: 0,
-            stone: 0,
-            food: 25
+            wood: 2,
+            stone: 2,
+            food: 52
         };
         this.workers = {
             gold: 0,
@@ -55,8 +55,24 @@ Player.prototype.printStats = function() {
     });
 };
 
-Player.prototype.updateStats = function() {
+Player.prototype.addToStats = function() {
     Object.keys(this.stats).forEach(key => {
         this.stats[key] += this.workers[key];
     });
+};
+
+Player.prototype.updateStats = function() {
+    let player = JSON.parse(localStorage.getItem('player'));
+    Object.entries(player.stats).forEach(entry => {
+        const [key, value] = entry;
+        this.stats[key] = player.stats[key];
+    });
+};
+
+Player.prototype.getStats = function() {
+    return this.stats;
+};
+
+Player.prototype.getWorkers = function() {
+    return this.workers;
 };

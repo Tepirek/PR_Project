@@ -8,13 +8,5 @@ class Building extends GameObject {
     };
 };
 
-Building.prototype.canBuy = function(stats) {
-    let buy = true;
-    Object.entries(stats).forEach(entry => {
-        const [key, value] = entry;
-        if(value < this.costs[key]) {
-            buy = false;
-        }
-    });
-    return buy;
-}
+
+
