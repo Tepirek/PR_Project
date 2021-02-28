@@ -13,14 +13,9 @@
 
         const lobby = new Lobby(sock);
         const chat = new Chat(sock);
-        chat.init();
-    
-        const player = new Player('test', sock.id);
-        localStorage.setItem('player', JSON.stringify(player));
-    
-        const game = new Game(sock);
-        game.addPlayer(player);
-        game.init();
-        game.update();
+        const player = new Player(sock);
+        const game = new Game(sock, player);
+        lobby.init();
+
     });
 })();

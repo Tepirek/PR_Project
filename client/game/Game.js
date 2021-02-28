@@ -4,6 +4,10 @@ class Game {
         this.player = player;
         this.gameBoard = document.querySelector('.gameBoard');
         this.gameOptions = document.querySelector('.gameOptions');
+        this.socket = sock;
+        this.socket.on('game_init', (response) => {
+            this.init(response);
+        });
         this.config = {
             areaSize: 24,
             width: 64,
@@ -49,6 +53,14 @@ class Game {
                     stone: 1,
                     food: 1
                 }
+            },
+            base: {
+                costs: {
+                    gold: 1,
+                    wood: 1,
+                    stone: 1,
+                    food: 1
+                }
             }
         };
     
@@ -78,14 +90,13 @@ Game.prototype.init = function(response) {
             this.map[index] = area;
         }
     }
+    this.update();
 };
 
 Game.prototype.update = function() {
     setInterval(() => {
-        this.players.forEach(player => {
-            player.updateStats();
-            player.printStats();
-        });
+        this.player.addToStats();
+        this.player.printStats();
     }, 1000);
 };
 
@@ -129,8 +140,21 @@ Game.prototype.addNewBuilding = function(position, target) {
     }
 };
 
-Game.prototype.addNewWorker = function() {
-    
+Game.prototype.addNewWorker = function(object) {
+    if(this.player.stats.food >= 25 && object.workers + 1 <= object.capacity) {
+        object.workers++;
+        this.player.workers[`${object.name.toLowerCase()}`]++;
+        this.player.stats.food -= 25;
+        // TODO: dodawanie surowców za pracowników
+        let key = '';
+        if(object.name == 'Farm') key = 'food';
+        else if(object.name == 'Sawmill') key = 'wood';
+        else if(object.name == 'Mine') key = 'gold';
+        else if(object.name == 'Quarry') key = 'stone';
+        this.player.workers[`${key}`]++;
+        this.player.printStats();
+        object.gameObject.click();
+    }
 };
 
 Game.prototype.getBuilding = function(position, target) {
@@ -153,10 +177,9 @@ Game.prototype.getBuilding = function(position, target) {
 
 Game.prototype.canBuy = function(target) {
     let buy = true;
-    let player = JSON.parse(localStorage.getItem('player'));
-    Object.entries(player.stats).forEach(entry => {
+    Object.entries(this.player.stats).forEach(entry => {
         const [key, value] = entry;
-        if(value < this.cost[`${target}`].costs[key]) {
+        if(parseInt(value) < parseInt(this.cost[`${target}`].costs[key])) {
             buy = false;
         }
     });
@@ -164,12 +187,9 @@ Game.prototype.canBuy = function(target) {
 };
 
 Game.prototype.buy = function(target) {
-    let player = JSON.parse(localStorage.getItem('player'));
-    Object.entries(player.stats).forEach(entry => {
+    Object.entries(this.player.stats).forEach(entry => {
         const [key, value] = entry;
-        player.stats[key] -= this.cost[`${target}`].costs[key];
+        this.player.stats[key] -= this.cost[`${target}`].costs[key];
     });
-    localStorage.setItem('player',JSON.stringify(player));
-    player.updateStats();
-    player.printStats();
+    this.player.printStats();
 };

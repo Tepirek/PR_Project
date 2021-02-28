@@ -2,10 +2,10 @@ class Player {
     constructor(sock) {
         this.gameObjects = new Array();
         this.stats = {
-            gold: 50,
-            wood: 2,
-            stone: 2,
-            food: 52
+            gold: 101,
+            wood: 6,
+            stone: 6,
+            food: 101
         };
         this.workers = {
             gold: 0,
@@ -68,14 +68,6 @@ Player.prototype.printStats = function() {
 Player.prototype.addToStats = function() {
     Object.keys(this.stats).forEach(key => {
         this.stats[key] += this.workers[key];
-    });
-};
-
-Player.prototype.updateStats = function() {
-    let player = JSON.parse(localStorage.getItem('player'));
-    Object.entries(player.stats).forEach(entry => {
-        const [key, value] = entry;
-        this.stats[key] = player.stats[key];
     });
 };
 

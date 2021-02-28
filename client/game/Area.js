@@ -64,4 +64,3 @@ Area.prototype.mouseleave = function() {
         this.gameObject.style.border = '';
     }
 };
-
