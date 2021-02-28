@@ -1,6 +1,6 @@
 class Area extends GameObject {
-    constructor(posX, posY, tileSize, game) {
-        super(posX, posY, tileSize, 'grass01.png', game);
+    constructor(posX, posY, tileSize, name, color, game) {
+        super(posX, posY, tileSize, name, color, game);
         this.free = true;
         this.object = undefined;
         this.type = 'grass';

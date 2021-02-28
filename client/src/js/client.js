@@ -13,8 +13,8 @@
 
         const lobby = new Lobby(sock);
         const chat = new Chat(sock);
-        const game = new Game(sock);
         const player = new Player(sock);
+        const game = new Game(sock, player);
         lobby.init();
 
     });

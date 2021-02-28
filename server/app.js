@@ -25,6 +25,7 @@ let gameParams = {
 let messages = Array();
 let players = Array();
 let lobby = Array();
+let index = 1;
 
 io.on('connection', (sock) => {
     console.log(`Someone connected! ${sock.id}`);
@@ -35,8 +36,9 @@ io.on('connection', (sock) => {
         players[`${sock.id}`] = {
             id: sock.id,
             username: name,
-            color: 2
+            color: index
         };
+        index++;
         console.log(players[sock.id]);
         const data = {
             id: sock.id,
@@ -46,18 +48,23 @@ io.on('connection', (sock) => {
         lobby.push(data);
         sock.emit('lobby_connected', data);
         io.to('lobby').emit('lobby_Players', lobby);
-        if(lobby.length == 1) {
+        if(lobby.length == 2) {
             console.log('Game init');
+            console.log(players);
             io.emit('game_prepare', 'abc');
             setTimeout(() => {
-                io.to('lobby').emit('game_init', gameParams);
-                sock.emit('player_init', players[sock.id]);
+                io.emit('game_init', gameParams);
+                Object.values(players).forEach(player => {
+                    console.log(player);
+                    io.to(player.id).emit('player_init', players[player.id]);
+                });
             }, 1000);
         }
     });
 
     // TODO: remove user data when disconnect
     sock.on('disconnect', (sock) => {
+        index = 1;
         lobby = lobby.filter(obj => {
             if(Object.keys(io.engine.clients).includes(obj.id)) return true;
             else return false;
@@ -66,7 +73,11 @@ io.on('connection', (sock) => {
     });
 
     sock.on('message', (msg) => {
-        const message = { date: tools.getDate(), text: msg };
+        const message = { 
+            date: tools.getDate(), 
+            text: msg,
+            author: players[sock.id].username
+        };
         messages.push(message);
         io.emit('message', message);
     });

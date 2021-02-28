@@ -1,6 +1,7 @@
 class Game {
-    constructor(sock) {
+    constructor(sock, player) {
         this.map = new Array();
+        this.player = player;
         this.gameBoard = document.querySelector('.gameBoard');
         this.gameOptions = document.querySelector('.gameOptions');
         this.socket = sock;
@@ -18,7 +19,7 @@ Game.prototype.init = function(response) {
     this.gameOptions.style.width = `${this.config.width * this.config.areaSize}px`;
     for(let i = 0; i < this.config.height; i++) {
         for(let j = 0; j < this.config.width; j++) {
-            let area = new Area(i, j, this.config.areaSize, this);
+            let area = new Area(i, j, this.config.areaSize, 'grass', 1, this);
             this.map[i*this.config.width + j] = area;
         }
     }
@@ -62,7 +63,13 @@ Game.prototype.addNewWorker = function() {
 };
 
 Game.prototype.getBuilding = function(position, target) {
-    let config = { x: position.x, y: position.y, size: this.config.areaSize, game: this };
+    let config = { 
+        x: position.x, 
+        y: position.y, 
+        size: this.config.areaSize, 
+        game: this, 
+        color: this.player.getColor()
+    };
     let building;
     if(target == 'tower') building = new Tower(config);
     else if(target == 'mine') building = new Mine(config);

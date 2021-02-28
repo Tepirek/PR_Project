@@ -43,7 +43,12 @@ Player.prototype.createBuilding = function(name) {
     buildings.appendChild(building);
 };
 
+Player.prototype.getColor = function() {
+    return this.color;
+}
+
 Player.prototype.init = function(response) {
+    console.log(response);
     this.id = response.id;
     this.username = response.username;
     this.color = response.color;

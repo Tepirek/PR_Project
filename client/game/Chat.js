@@ -58,7 +58,8 @@ Chat.prototype.onChatSubmitted = function (e) {
 
 Chat.prototype.log = function(msg) {
     const li = document.createElement('li');
-    li.innerHTML = `<small>${msg.date}</small> - ${msg.text}`;
+    const author = (msg.author) ? `[${msg.author}]` : '';
+    li.innerHTML = `<small>${msg.date} ${author}</small> - ${msg.text}`;
     this.parent.appendChild(li);
     this.parent.scrollTop = this.parent.scrollHeight;
 }

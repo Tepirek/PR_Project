@@ -1,11 +1,12 @@
 class GameObject {
-    constructor(posX, posY, tileSize, image, game) {
+    constructor(posX, posY, tileSize, name, color, game) {
         this.position = {
             x: posX,
             y: posY
         };
         this.size = tileSize;
-        this.image = image;
+        this.name = name;
+        GameObject.prototype.color = color;
         GameObject.prototype.game = game;
         this.gameObject = document.createElement('div');
         this.gameObject.onmouseenter = (e) => this.mouseenter();
@@ -38,7 +39,7 @@ GameObject.prototype.draw = function() {
         display:flex;
         align-items:center;
         justify-content:space-evenly;
-        background-image:url('../src/img/${this.image}')
+        background-image:url('../src/img/${this.name}0${this.color}.png')
     `;
     document.querySelector('.gameBoard').appendChild(this.gameObject);
 };
