@@ -10,16 +10,12 @@
 
     const sock = io();
     sock.on('connect', () => {
-        localStorage.setItem('user', sock.id);
+
+        const lobby = new Lobby(sock);
         const chat = new Chat(sock);
-        chat.init();
-    
-        const player = new Player('test', sock.id);
-        localStorage.setItem('player', JSON.stringify(player));
-    
-        const game = new Game();
-        game.addPlayer(player);
-        game.init();
-        game.update();
+        const game = new Game(sock);
+        const player = new Player(sock);
+        lobby.init();
+
     });
 })();

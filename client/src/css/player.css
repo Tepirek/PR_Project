@@ -18,14 +18,14 @@
     font-size: 1rem;
     width: 64px;
     height: 64px;
-    border: 1px solid #4287f5;
+    border: 1px solid #1be393;
     background-color: #cccccc;
     color: #000000;
     font-weight: bold;
 }
 
 .buildingPrototype:hover {
-    background-color: #4287f5;
+    background-color: #1be393;
     transition: 0.5s;
     cursor: pointer;
 }

@@ -1,13 +1,18 @@
 class Chat {
     constructor(sock) {
+        this.chat = document.querySelector('.chat');
         this.socket = sock;
-        this.socket.on('message', this.log);
+        this.socket.on('message', (response) => {
+            this.log(response);
+        });
+        this.socket.on('game_init', (response) => {
+            this.init(response);
+        });
     };
 };
 
-Chat.prototype.init = function () {
+Chat.prototype.init = function (response) {
     let config = JSON.parse(localStorage.getItem('config'));
-    this.chat = document.querySelector('.chat');
     this.chat.innerHTML = `
         <ul id = "events"></ul>
         <div class="controls">
@@ -17,8 +22,11 @@ Chat.prototype.init = function () {
                     <button id="say">Send</button>
                 </form>
             </div>
-      </div>
+        </div>
     `;
+    this.input = document.querySelector('#chat');
+    this.parent = document.querySelector('#events');
+
     this.chat.style.display = (config.chat) ? 'block' : 'none'; 
 
     this.messages = document.querySelector('#events');
@@ -35,26 +43,22 @@ Chat.prototype.init = function () {
         }
         localStorage.setItem('config', JSON.stringify(config));
     });
-
     document.querySelector('#chat-form').addEventListener('submit', (e) => {
         this.onChatSubmitted(e);
     });
-    
     this.socket.emit('initChat');
 };
 
 Chat.prototype.onChatSubmitted = function (e) {
     e.preventDefault();
-    const input = document.querySelector('#chat');
-    const text = input.value;
+    const text = this.input.value;
     if(text != '') this.socket.emit('message', text);
-    input.value = '';
+    this.input.value = '';
 };
 
 Chat.prototype.log = function(msg) {
-    const parent = document.querySelector('#events');
     const li = document.createElement('li');
     li.innerHTML = `<small>${msg.date}</small> - ${msg.text}`;
-    parent.appendChild(li);
-    parent.scrollTop = parent.scrollHeight;
+    this.parent.appendChild(li);
+    this.parent.scrollTop = this.parent.scrollHeight;
 }

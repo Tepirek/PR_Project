@@ -1,18 +1,18 @@
 class Game {
-    constructor() {    
+    constructor(sock) {
         this.map = new Array();
-        this.players = new Array();
         this.gameBoard = document.querySelector('.gameBoard');
         this.gameOptions = document.querySelector('.gameOptions');
-        this.config = {
-            areaSize: 24,
-            width: 64,
-            height: 32
-        };
-    }
+        this.socket = sock;
+        this.socket.on('game_init', (response) => {
+            this.init(response);
+        });
+    };
 };
 
-Game.prototype.init = function() {
+Game.prototype.init = function(response) {
+    console.log(response);
+    this.config = response.config;
     this.gameBoard.style.width = `${this.config.width * this.config.areaSize}px`;
     this.gameBoard.style.height = `${this.config.height * this.config.areaSize}px`;
     this.gameOptions.style.width = `${this.config.width * this.config.areaSize}px`;
@@ -22,9 +22,6 @@ Game.prototype.init = function() {
             this.map[i*this.config.width + j] = area;
         }
     }
-    this.players.forEach(player => {
-        player.init();
-    });
 };
 
 Game.prototype.update = function() {
