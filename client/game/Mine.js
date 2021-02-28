@@ -1,6 +1,6 @@
 class Mine extends Business {
-    constructor() {
-        super('mine01.png', 'Mine', 50, { 
+    constructor(config) {
+        super(config.x, config.y, config.size, 'mine01.png', config.game, 'Mine', 50, { 
             gold: 20, 
             wood: 20, 
             stone: 20, 

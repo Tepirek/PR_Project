@@ -20,7 +20,6 @@ Game.prototype.init = function() {
         for(let j = 0; j < this.config.width; j++) {
             let area = new Area(i, j, this.config.areaSize, this);
             this.map[i*this.config.width + j] = area;
-            this.gameBoard.appendChild(area.getArea());
         }
     }
     this.players.forEach(player => {
@@ -52,26 +51,26 @@ Game.prototype.handleData = function(event) {
 };
 
 Game.prototype.addNewBuilding = function(position, target) {
+    const index = position.x*this.config.width + position.y;
     const building = this.getBuilding(position, target);
-    console.log(this.map[position.x*this.config.width + position.y]);
-    console.log(building);
-    this.map[position.x*this.config.width + position.y].setFree(false);
-    this.map[position.x*this.config.width + position.y].setObject(building);
-    this.map[position.x*this.config.width + position.y] = building;
-    console.log(this.map[position.x*this.config.width + position.y]);
+    this.map[index].setFree(false);
+    this.map[index].setObject(building);
+    delete this.map[index];
+    this.map[index] = building;
+    console.log(this.map[index]);
 };
 
 Game.prototype.addNewWorker = function() {
-    const id = localStorage.getItem('user');
-    // this.players[id] = ... TODO
+    
 };
 
 Game.prototype.getBuilding = function(position, target) {
+    let config = { x: position.x, y: position.y, size: this.config.areaSize, game: this };
     let building;
-    if(target == 'tower') building = new Tower();
-    else if(target == 'mine') building = new Mine();
-    else if(target == 'sawmill') building = new Sawmill();
-    else if(target == 'quarry') building = new Quarry();
-    else if(target == 'farm') building = new Farm(position.x, position.y, this.config.areaSize);
+    if(target == 'tower') building = new Tower(config);
+    else if(target == 'mine') building = new Mine(config);
+    else if(target == 'sawmill') building = new Sawmill(config);
+    else if(target == 'quarry') building = new Quarry(config);
+    else if(target == 'farm') building = new Farm(config);
     return building;
 };

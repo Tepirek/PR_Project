@@ -15,6 +15,7 @@
         chat.init();
     
         const player = new Player('test', sock.id);
+        localStorage.setItem('player', JSON.stringify(player));
     
         const game = new Game();
         game.addPlayer(player);

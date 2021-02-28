@@ -1,6 +1,6 @@
 class Quarry extends Business {
-    constructor() {
-        super('quarry01.png', 'Quarry', 50, { 
+    constructor(config) {
+        super(config.x, config.y, config.size, 'quarry01.png', config.game, 'Quarry', 50, { 
             gold: 20, 
             wood: 20, 
             stone: 20, 

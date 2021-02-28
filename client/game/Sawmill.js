@@ -1,6 +1,6 @@
 class Sawmill extends Business {
-    constructor() {
-        super('sawmill01.png', 'Sawmill', 50, { 
+    constructor(config) {
+        super(config.x, config.y, config.size, 'sawmill01.png', config.game, 'Sawmill', 50, { 
             gold: 20, 
             wood: 20, 
             stone: 20, 

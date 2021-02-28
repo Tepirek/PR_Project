@@ -1,6 +1,6 @@
 class Building extends GameObject {
-    constructor(posX, posY, tileSize, image, name, life, costs) {
-        super(posX, posY, tileSize, image);
+    constructor(posX, posY, tileSize, image, game, name, life, costs) {
+        super(posX, posY, tileSize, image, game);
         this.name = name;
         this.currentLife = life;
         this.life = life;

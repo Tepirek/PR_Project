@@ -1,19 +1,21 @@
 class Area extends GameObject {
     constructor(posX, posY, tileSize, game) {
-        super(posX, posY, tileSize, 'grass01.png');
-        this.game = game;
+        super(posX, posY, tileSize, 'grass01.png', game);
         this.free = true;
         this.object = undefined;
+        this.type = 'grass';
         this.gameObject.onclick = (e) => this.click(); 
 
         this.gameObject.addEventListener('click', () => {
-            if(this.free) {
-                let action = JSON.parse(localStorage.getItem('action'));
-                if(action.type == 'drag') {
-                    this.game.addNewBuilding(this.position, action.target);
+            if(this.type = 'grass') {
+                if(this.free) {
+                    let action = JSON.parse(localStorage.getItem('action'));
+                    if(action.type == 'drag') {
+                        this.game.addNewBuilding(this.position, action.target);
+                    }
+                    action = { type: '', target: '' };
+                    localStorage.setItem('action', JSON.stringify(action));
                 }
-                action = { type: '', target: '' };
-                localStorage.setItem('action', JSON.stringify(action));
             }
         });
     };
@@ -24,6 +26,10 @@ Area.prototype.click = function() {
     if(!this.free && action.type == 'select') {
         this.gameObject.style.border = '3px solid #ffffff';
     }
+};
+
+Area.prototype.clear = function() {
+    this.gameObject.parentElement.removeChild(this.gameObject);
 };
 
 Area.prototype.getArea = function() {
@@ -41,5 +47,6 @@ Area.prototype.setFree = function(value) {
 Area.prototype.setObject = function(object) {
     this.object = object;
     this.image = object.image;
-    this.draw();
+    this.clear();
+    //this.draw();
 }
