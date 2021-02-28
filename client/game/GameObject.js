@@ -1,36 +1,34 @@
 class GameObject {
-    constructor(cx,cy,image) {
-        this.position = { x:cx, y:cy};
-        this.dimension = {width: 48,height: 96};
-        this.GameObject = document.createElement('div');
+    constructor(posX, posY, tileSize, image) {
+        this.position = {
+            x: posX,
+            y: posY
+        };
+        this.size = tileSize;
         this.image = image;
-    };
-
-    run = function() {
-        setInterval(() => {
-            this.move(0, 1);
-        }, 1000/24);
+        this.gameObject = document.createElement('div');
+        this.gameObject.onmouseenter = (e) => this.mouseenter();
+        this.gameObject.onmouseleave = (e) => this.mouseleave();
         this.draw();
     };
-    
 };
 
-GameObject.prototype.getPosition = function() {
-    return this.position;
+GameObject.prototype.mouseenter = function() {
+    let action = JSON.parse(localStorage.getItem('action'));
+    if(action.type == 'drag') {
+        this.gameObject.style.border = '3px solid #ff1f1f';
+    }
 };
 
-GameObject.prototype.getDimension = function() {
-    return this.dimension;
+GameObject.prototype.mouseleave = function() {
+    let action = JSON.parse(localStorage.getItem('action'));
+    if(action.type != 'select') {
+        this.gameObject.style.border = '';
+    }
 };
 
 GameObject.prototype.draw = function() {
-    this.gameObject.style = `width:${this.dimension.width}px;height:${this.dimension.height}px;position:absolute;top:${this.position.y};left:${this.position.x};z-index:1000;background-size:cover;`;
-    this.gameObject.style.backgroundImage = `url('${this.image}')`;
-    this.gameObject.style.top = `${this.position.y}px`;
-    this.gameObject.style.left = `${this.position.x}px`;
-    document.body.appendChild(this.gameObject);
-};
-
-GameObject.prototype.getInfo = function() {
-    console.log(this);
+    this.gameObject.style.cursor = 'pointer';
+    this.gameObject.style = `position:absolute;width:${this.size}px;height:${this.size}px;top:${this.position.x * this.size}px;left:${this.position.y * this.size}px;display:flex;align-items:center;justify-content:space-evenly;`;
+        this.gameObject.style.backgroundImage = `url('../src/img/${this.image}')`;
 };

@@ -1,67 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="src/css/style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="src/css/style.css" />
+    <link rel="stylesheet" href="src/css/player.css" />
     <title>Ant's War</title>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <div class="game">
-            <div class="stats">
-                <ul>
-                    <li>Gold 
-                        <span>100</span> 
-                    </li>
-                    <li>Wood 
-                        <span>100</span> 
-                    </li>
-                    <li>Stone 
-                        <span>100</span> 
-                    </li>
-                    <li>Food 
-                        <span>100</span> 
-                    </li>
-                </ul>
-            </div>
-            <div class="gameBoard">
-
-            </div>
-            <div class="gameOptions">
-                <div class="buildings">
-                    Buildings
-                </div>
-                <div class="units">
-                    button2
-                </div>
-                <div class="chatButton">
-                    Chat
-                </div>
-            </div>
+      <div class="game">
+        <div class="stats">
+          <ul>
+            <li>
+              Gold
+              <span id="gold">0</span>
+            </li>
+            <li>
+              Wood
+              <span id="wood">0</span>
+            </li>
+            <li>
+              Stone
+              <span id="stone">0</span>
+            </li>
+            <li>
+              Food
+              <span id="food">0</span>
+            </li>
+          </ul>
         </div>
-        <div class="chat">
-            <ul id="events">
-                <li>Welcome!</li>
-                <li>Welcome!</li>
-                <li>Welcome!</li>
-                <li>Welcome!</li>
-                <li>Welcome!</li>
-                <li>Welcome!</li>
-                <li>Welcome!</li>
-                <li>Welcome!</li>
-            </ul>
-            <div class="controls">
-              <div class="chat-wrapper">
-                <form id="chat-form">
-                  <input id="chat" autocomplete="off" title="chat"/>
-                  <button id="say">Send</button>
-                </form>
-              </div>
-            </div>
-          </div>
+        <div class="gameBoard"></div>
+        <div class="gameOptions">
+          <div class="buildings"></div>
+          <div class="objectOptions"></div>
+          <div class="units"></div>
+          <div class="chatButton">Chat</div>
+        </div>
+      </div>
+      <div class="chat"></div>
     </div>
+
+    <script src="game/GameObject.js"></script>
+    <script src="game/Building.js"></script>
+    <script src="game/Business.js"></script>
+    <script src="game/Tower.js"></script>
+    <script src="game/Mine.js"></script>
+    <script src="game/Sawmill.js"></script>
+    <script src="game/Quarry.js"></script>
+    <script src="game/Farm.js"></script>
+
+    <script src="game/Player.js"></script>
+    <script src="game/Area.js"></script>
+    <script src="game/Game.js"></script>
+    <script src="game/Chat.js"></script>
+
+    <script src="socket.io/socket.io.js"></script>
     <script src="src/js/client.js"></script>
-</body>
+  </body>
 </html>
