@@ -1,6 +1,6 @@
 class Business extends Building {
-    constructor(posX, posY, tileSize, image, game, name, life, costs, capacity) {
-        super(posX, posY, tileSize, image, game, name, life, costs);
+    constructor(posX, posY, tileSize, name, color, game, life, costs, capacity) {
+        super(posX, posY, tileSize, name, color, game, life, costs);
         this.workers = 0;
         this.capacity = capacity;
         this.gameObject.onclick = (e) => this.showOptions();

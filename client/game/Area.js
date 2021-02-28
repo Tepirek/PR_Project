@@ -1,6 +1,6 @@
 class Area extends GameObject {
-    constructor(posX, posY, tileSize, game) {
-        super(posX, posY, tileSize, 'grass01.png', game);
+    constructor(posX, posY, tileSize, name, color, game) {
+        super(posX, posY, tileSize, name, color, game);
         this.free = true;
         this.object = undefined;
         this.type = 'grass';
@@ -47,7 +47,6 @@ Area.prototype.setFree = function(value) {
 
 Area.prototype.setObject = function(object) {
     this.object = object;
-    this.image = object.image;
     this.clear();
     //this.draw();
 };
@@ -65,3 +64,4 @@ Area.prototype.mouseleave = function() {
         this.gameObject.style.border = '';
     }
 };
+

@@ -1,7 +1,5 @@
 class Player {
-    constructor(nick, socketId) {
-        this.nick = nick;
-        this.id = socketId;
+    constructor(sock) {
         this.gameObjects = new Array();
         this.stats = {
             gold: 50,
@@ -21,6 +19,10 @@ class Player {
             stone: document.querySelector('#stone'),
             food: document.querySelector('#food')
         };
+        this.socket = sock;
+        this.socket.on('player_init', (response) => {
+            this.init(response);
+        });
     }
 };
 
@@ -31,7 +33,7 @@ Player.prototype.createBuilding = function(name) {
     building.className = `buildingPrototype`;
     building.innerHTML = `
         <div class="buildingBox">
-            <img src="../src/img/${name}01.png" alt="">
+            <img src="../src/img/${name}0${this.color}.png" alt="">
             ${name}
         </div>
     `;
@@ -41,7 +43,15 @@ Player.prototype.createBuilding = function(name) {
     buildings.appendChild(building);
 };
 
-Player.prototype.init = function() {
+Player.prototype.getColor = function() {
+    return this.color;
+}
+
+Player.prototype.init = function(response) {
+    console.log(response);
+    this.id = response.id;
+    this.username = response.username;
+    this.color = response.color;
     const tower = this.createBuilding('Tower');
     const mine = this.createBuilding('Mine');
     const sawmill = this.createBuilding('Sawmill');

@@ -44,12 +44,12 @@ body {
     text-align: center;
     padding: 10px;
     margin: 10px;
-    border: 1px solid #4287f5;
+    border: 1px solid #1be393;
     border-radius: 20px;
 }
 
 .units:hover, .chatButton:hover {
-    background-color: #4287f5;
+    background-color: #1be393;
     transition: 1s;
     cursor: pointer;
 }
@@ -90,14 +90,14 @@ body {
 
 .chat {
     position: absolute;
-    background-color: rgb(255, 255, 255);
+    background-color: #333333;
     margin: 20px;
-    border: 3px solid #4287f5;
-    color: #000000;
+    border: 3px solid #1be393;
+    color: #ffffff;
     width: 40vw;
 }
 
-.chat input {
+.chat input, .lobby input {
     outline: none;
     font-size: 1.0rem;
     padding: 0 5px;
@@ -109,7 +109,7 @@ button {
     padding: 3px 15px;
     color: white;
     line-height: 20px;
-    background-color: #4287f5;
+    background-color: #1be393;
     border: none;
     border-radius: 2px;
     cursor: pointer;

@@ -1,6 +1,6 @@
 class Tower extends Building {
     constructor(config) {
-        super(config.x, config.y, config.size, 'tower01.png', config.game, 'Tower', 50, { 
+        super(config.x, config.y, config.size, 'Tower', config.color, config.game, 50, { 
             gold: 20, 
             wood: 20, 
             stone: 20, 

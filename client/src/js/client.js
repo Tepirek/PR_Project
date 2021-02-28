@@ -10,7 +10,8 @@
 
     const sock = io();
     sock.on('connect', () => {
-        localStorage.setItem('user', sock.id);
+
+        const lobby = new Lobby(sock);
         const chat = new Chat(sock);
         chat.init();
     
