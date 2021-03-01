@@ -59,19 +59,27 @@ Player.prototype.printStats = function() {
         <ul>
             <li>
                 Gold
-            <span id="gold">${this.stats.gold}</span>
+            <span id="gold">
+                ${this.stats.gold} (+${this.workers.gold})
+            </span>
             </li>
             <li>
                 Wood
-            <span id="wood">${this.stats.wood}</span>
+            <span id="wood">
+                ${this.stats.wood} (+${this.workers.wood})
+            </span>
             </li>
             <li>
                 Stone
-            <span id="stone">${this.stats.stone}</span>
+            <span id="stone">
+                ${this.stats.stone} (+${this.workers.stone})
+            </span>
             </li>
             <li>
                 Food
-            <span id="food">${this.stats.food}</span>
+            <span id="food">
+                ${this.stats.food} (+${this.workers.food})
+            </span>
             </li>
         </ul>
     `;
