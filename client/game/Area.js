@@ -47,8 +47,7 @@ Area.prototype.setFree = function(value) {
 
 Area.prototype.setObject = function(object) {
     this.object = object;
-    this.clear();
-    //this.draw();
+    this.gameObject.style.border = '';
 };
 
 Area.prototype.mouseenter = function() {

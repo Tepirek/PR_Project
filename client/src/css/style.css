@@ -5,9 +5,16 @@
 }
 
 body {
-    background-color: #333333;
+    background-color: #ffffff;
     color: #ffffff;
     font-size: 1.2rem;
+    overflow: hidden;
+}
+
+.backgroundImage {
+    position: absolute;
+    top: -45%;
+    transform: translateY(45%);
 }
 
 .container {
@@ -19,13 +26,19 @@ body {
     justify-content: space-evenly;
 }
 
+.footer {
+    color:#333333;
+    font-size: 2rem;
+    font-weight: bold;
+    padding: 10px;
+}
+
 .game {
     flex: 1 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
-    border: 1px solid greenyellow;
 }
 
 .gameBoard {
@@ -92,7 +105,6 @@ body {
     position: absolute;
     background-color: #333333;
     margin: 20px;
-    border: 3px solid #1be393;
     color: #ffffff;
     width: 40vw;
 }

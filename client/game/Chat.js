@@ -1,6 +1,7 @@
 class Chat {
     constructor(sock) {
         this.chat = document.querySelector('.chat');
+        this.chatButton = document.querySelector('.chatButton');
         this.socket = sock;
         this.socket.on('message', (response) => {
             this.log(response);
@@ -24,12 +25,14 @@ Chat.prototype.init = function (response) {
             </div>
         </div>
     `;
+    this.chat.style.border = '3px solid #333333';
     this.input = document.querySelector('#chat');
     this.parent = document.querySelector('#events');
 
     this.chat.style.display = (config.chat) ? 'block' : 'none'; 
 
     this.messages = document.querySelector('#events');
+    this.chatButton.innerHTML = 'Chat';
 
     document.querySelector('.chatButton').addEventListener('click', () => {
         if(config.chat) {

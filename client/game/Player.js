@@ -13,12 +13,6 @@ class Player {
             stone: 0,
             food: 0
         };
-        this.statsBoxes = {
-            gold: document.querySelector('#gold'),
-            wood: document.querySelector('#wood'),
-            stone: document.querySelector('#stone'),
-            food: document.querySelector('#food')
-        };
         this.socket = sock;
         this.socket.on('player_init', (response) => {
             this.init(response);
@@ -60,9 +54,27 @@ Player.prototype.init = function(response) {
 };
 
 Player.prototype.printStats = function() {
-    Object.keys(this.stats).forEach(key => {
-        this.statsBoxes[key].innerHTML = `${this.stats[key]}(+${this.workers[key]})`;
-    });
+    const stats = document.querySelector('.stats');
+    stats.innerHTML = `
+        <ul>
+            <li>
+                Gold
+            <span id="gold">${this.stats.gold}</span>
+            </li>
+            <li>
+                Wood
+            <span id="wood">${this.stats.wood}</span>
+            </li>
+            <li>
+                Stone
+            <span id="stone">${this.stats.stone}</span>
+            </li>
+            <li>
+                Food
+            <span id="food">${this.stats.food}</span>
+            </li>
+        </ul>
+    `;
 };
 
 Player.prototype.addToStats = function() {

@@ -1,6 +1,5 @@
 class Game {
     constructor(sock, player) {
-        this.map = new Array();
         this.player = player;
         this.gameBoard = document.querySelector('.gameBoard');
         this.gameOptions = document.querySelector('.gameOptions');
@@ -67,7 +66,11 @@ class Game {
 };
 
 Game.prototype.init = function(response) {
-    console.log(response);
+    document.body.style.backgroundColor = '#333333';
+    const antBg = document.querySelector('.backgroundImage');
+    const footer = document.querySelector('.footer');
+    document.querySelector('.container').removeChild(antBg);
+    document.querySelector('.container').removeChild(footer);
     this.config = response.config;
     this.map = response.map;
     this.gameBoard.style.width = `${this.config.width * this.config.areaSize}px`;
@@ -113,25 +116,13 @@ Game.prototype.addNewBuilding = function(position, target) {
     if(this.canBuy(target)){
         const index = position.x*this.config.width + position.y;
         const building = this.getBuilding(position, target);
+        this.player.stats.food += 25;
+        this.addNewWorker(building);
         this.map[index].setFree(false);
         this.map[index].setObject(building);
         delete this.map[index];
         this.map[index] = building;
         this.buy(target);
-        console.log(this.map[index]);
-    }
-    else {
-        const options = document.querySelector('.objectOptions');
-        options.innerHTML = `
-            <table>
-                <tr>
-                    <td>Masz za mało surowców!</td>
-                </tr>
-                <tr>
-                    <td>Nie ma nic za darmo!</td>
-                </tr>
-            </table>
-        `;
     }
 };
 

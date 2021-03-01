@@ -23,7 +23,8 @@ GameObject.prototype.draw = function() {
         display:flex;
         align-items:center;
         justify-content:space-evenly;
-        background-image:url('../src/img/${this.name}0${this.color}.png')
+        background-image:url('../src/img/${this.name}0${this.color}.png');
+        cursor:pointer;
     `;
     document.querySelector('.gameBoard').appendChild(this.gameObject);
 };

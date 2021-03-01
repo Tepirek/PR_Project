@@ -4,26 +4,11 @@ class Business extends Building {
         this.workers = 0;
         this.capacity = capacity;
         this.gameObject.onclick = (res) => {
+            // reset wyboru budynku ze sklepu
+            localStorage.setItem('action', JSON.stringify({ type: '', target: '' }));
             this.showOptions(res);
         };
-
     };
-};
-
-Business.prototype.addNewWorker = function() {
-    if(this.workers + 1 <= this.capacity) {
-        let player = JSON.parse(localStorage.getItem('player'));
-        if(this.canBuy(player.stats)) {
-            this.workers++;
-            this.game.addNewWorker(player);
-        } else console.log('You don\'t have enough materials!');
-    } else console.log('You can\'t more workers!');
-}
-
-
-
-Business.prototype.highlight = function() {
-
 };
 
 Business.prototype.showOptions = function(res) {
