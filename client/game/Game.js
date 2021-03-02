@@ -7,6 +7,9 @@ class Game {
         this.socket.on('game_init', (response) => {
             this.init(response);
         });
+        this.socket.on('game_addNewBuilding', (response) => {
+            this.__addNewBuilding(response);
+        });
         this.config = {
             areaSize: 24,
             width: 64,
@@ -123,7 +126,17 @@ Game.prototype.addNewBuilding = function(position, target) {
         delete this.map[index];
         this.map[index] = building;
         this.buy(target);
+        this.socket.emit('game_addNewBuilding', {
+            x: position.x,
+            y: position.y,
+            id: this.player.id,
+            target: target
+        });
     }
+};
+
+Game.prototype.__addNewBuilding = function(response) {
+    
 };
 
 Game.prototype.addNewWorker = function(object) {

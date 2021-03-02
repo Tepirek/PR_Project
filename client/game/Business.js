@@ -19,7 +19,7 @@ Business.prototype.showOptions = function(res) {
             <tr>
                 <td>Workers</td>
                 <td>${this.workers}/${this.capacity}</td>
-                <td><img id="addWorker" src="../src/img/plus.png" alt="plus"></td>
+                <td><img id="addWorker" src="../src/img/plus.png" alt="plus" style="cursor:pointer"></td>
             </tr>
             <tr>
                 <td>Life</td>

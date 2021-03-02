@@ -26,6 +26,10 @@ let messages = Array();
 let players = Array();
 let lobby = Array();
 let index = 1;
+let lobbyParams = {
+    maxPlayers: 1,
+    timeout: 1000
+};
 
 io.on('connection', (sock) => {
     console.log(`Someone connected! ${sock.id}`);
@@ -48,7 +52,7 @@ io.on('connection', (sock) => {
         lobby.push(data);
         sock.emit('lobby_connected', data);
         io.to('lobby').emit('lobby_Players', lobby);
-        if(lobby.length == 1) {
+        if(lobby.length == lobbyParams.maxPlayers) {
             console.log('Game init');
             console.log(players);
             io.emit('game_prepare', 'abc');
@@ -70,8 +74,13 @@ io.on('connection', (sock) => {
                     io.to(player.id).emit('player_init', players[player.id]);
                 });
                 io.emit('game_init', gameParams);
-            }, 1000);
+            }, lobbyParams.timeout);
         }
+    });
+
+    // GAME EVENTS
+    sock.on('game_addNewBuilding', (request) => {
+        io.emit('game_addNewBuilding', request);
     });
 
     // TODO: remove user data when disconnect
