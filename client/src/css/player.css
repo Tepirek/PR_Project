@@ -33,3 +33,10 @@
 .objectOptions table {
     width: 100%;
 }
+
+#antBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}

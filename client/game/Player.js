@@ -5,8 +5,9 @@ class Player {
             gold: 101,
             wood: 6,
             stone: 6,
-            food: 101
+            food: 500,
         };
+        
         this.workers = {
             gold: 0,
             wood: 0,
@@ -51,6 +52,7 @@ Player.prototype.init = function(response) {
     const sawmill = this.createBuilding('Sawmill');
     const quarry = this.createBuilding('Quarry');
     const farm = this.createBuilding('Farm');
+    const base = this.createBuilding('Base');
 };
 
 Player.prototype.printStats = function() {
@@ -79,6 +81,11 @@ Player.prototype.printStats = function() {
                 Food
             <span id="food">
                 ${this.stats.food} (+${this.workers.food})
+            </span>
+            </li>
+            Force limit 
+            <span id="force_limit">
+                ${this.stats.food} 
             </span>
             </li>
         </ul>

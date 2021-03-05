@@ -63,6 +63,14 @@ class Game {
                     stone: 1,
                     food: 1
                 }
+            },
+            squad: {
+                costs: {
+                    gold: 1,
+                    wood: 1,
+                    stone: 1,
+                    food: 1
+                }
             }
         };
     }
@@ -140,21 +148,28 @@ Game.prototype.__addNewBuilding = function(response) {
 };
 
 Game.prototype.addNewWorker = function(object) {
-    if(this.player.stats.food >= 25 && object.workers + 1 <= object.capacity) {
+    if(object.name == 'Base') {
+       if(this.player.stats.food >= 250 && object.workers + 10 <= object.capacity) {
+            object.workers += 10;
+            this.player.stats.food -= 250;
+        }
+    } else if(this.player.stats.food >= 25 && object.workers + 1 <= object.capacity) {
         object.workers++;
-        this.player.workers[`${object.name.toLowerCase()}`]++;
         this.player.stats.food -= 25;
         // TODO: dodawanie surowców za pracowników
+        this.player.workers[`${object.name.toLowerCase()}`]++;
         let key = '';
         if(object.name == 'Farm') key = 'food';
         else if(object.name == 'Sawmill') key = 'wood';
         else if(object.name == 'Mine') key = 'gold';
         else if(object.name == 'Quarry') key = 'stone';
         this.player.workers[`${key}`]++;
-        this.player.printStats();
-        object.gameObject.click();
     }
+    this.player.printStats();
+    object.gameObject.click();
 };
+
+
 
 Game.prototype.getBuilding = function(position, target) {
     let config = { 
@@ -171,6 +186,7 @@ Game.prototype.getBuilding = function(position, target) {
     else if(target == 'quarry') building = new Quarry(config);
     else if(target == 'farm') building = new Farm(config);
     else if(target == 'base') building = new Base(config);
+    else if(target == 'squad') building = new Squad(config);
     return building;
 };
 

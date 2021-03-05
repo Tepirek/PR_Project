@@ -6,21 +6,27 @@ class Tower extends Building {
             stone: 20, 
             food: 20 
         });
-        this.soldiers = 0;
+        this.workers = 0;
         this.capacity = 10;
-        this.gameObject.onclick = (e) => this.showOptions();
+        this.gameObject.onclick = (res) => {
+            // reset wyboru budynku ze sklepu
+            localStorage.setItem('action', JSON.stringify({ type: '', target: '' }));
+            this.showOptions(res);
+        };
     };
 };
 
-Tower.prototype.showOptions = function() {
+
+
+Tower.prototype.showOptions = function(res) {
     const options = document.querySelector('.objectOptions');
     options.innerHTML = `
             ${this.name}
         <table>
             <tr>
                 <td>Soldiers</td>
-                <td>${this.soldiers}/${this.capacity}</td>
-                <td><img src="../src/img/plus.png" alt="plus"></td>
+                <td>${this.workers}/${this.capacity}</td>
+                <td><img id="addSoldier" src="../src/img/plus.png" alt="plus" style="cursor:pointer"></td>
             </tr>
             <tr>
                 <td>Life</td>
@@ -28,4 +34,7 @@ Tower.prototype.showOptions = function() {
             </tr>
         </table>
     `;
+    document.querySelector('#addSoldier').onclick = () => {
+        this.game.addNewWorker(this);
+    }
 }
