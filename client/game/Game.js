@@ -7,72 +7,12 @@ class Game {
         this.socket.on('game_init', (response) => {
             this.init(response);
         });
-        this.socket.on('game_addNewBuilding', (response) => {
+        this.socket.on('game__updateStats', (response) => {
+            this.__updateStats(response);
+        });
+        this.socket.on('game__addNewBuilding', (response) => {
             this.__addNewBuilding(response);
         });
-        this.config = {
-            areaSize: 24,
-            width: 64,
-            height: 32
-        };
-        this.cost = {
-            tower: {
-                costs: {
-                    gold: 1,
-                    wood: 1,
-                    stone: 1,
-                    food: 1
-                }
-            },
-            farm: {
-                costs: {
-                    gold: 1,
-                    wood: 1,
-                    stone: 1,
-                    food: 1
-                }
-            },
-            mine: {
-                costs: {
-                    gold: 1,
-                    wood: 1,
-                    stone: 1,
-                    food: 1
-                }
-            },
-            quarry: {
-                costs: {
-                    gold: 1,
-                    wood: 1,
-                    stone: 1,
-                    food: 1
-                }
-            },
-            sawmill: {
-                costs: {
-                    gold: 1,
-                    wood: 1,
-                    stone: 1,
-                    food: 1
-                }
-            },
-            base: {
-                costs: {
-                    gold: 1,
-                    wood: 1,
-                    stone: 1,
-                    food: 1
-                }
-            },
-            squad: {
-                costs: {
-                    gold: 1,
-                    wood: 1,
-                    stone: 1,
-                    food: 1
-                }
-            }
-        };
     }
 };
 
@@ -84,6 +24,7 @@ Game.prototype.init = function(response) {
     document.querySelector('.container').removeChild(footer);
     this.config = response.config;
     this.map = response.map;
+    this.cost = response.costs;
     this.gameBoard.style.width = `${this.config.width * this.config.areaSize}px`;
     this.gameBoard.style.height = `${this.config.height * this.config.areaSize}px`;
     this.gameOptions.style.width = `${this.config.width * this.config.areaSize}px`;
@@ -99,14 +40,6 @@ Game.prototype.init = function(response) {
             this.map[index] = area;
         }
     }
-    this.update();
-};
-
-Game.prototype.update = function() {
-    setInterval(() => {
-        this.player.addToStats();
-        this.player.printStats();
-    }, 1000);
 };
 
 Game.prototype.addPlayer = function(player) {
@@ -123,28 +56,33 @@ Game.prototype.handleData = function(event) {
 
 };
 
+Game.prototype.__updateStats = function(response) {
+    this.player.stats = response.stats;
+    this.player.workers = response.workers;
+    this.player.printStats();
+};
+
 Game.prototype.addNewBuilding = function(position, target) {
     if(this.canBuy(target)){
-        const index = position.x*this.config.width + position.y;
-        const building = this.getBuilding(position, target);
-        this.player.stats.food += 25;
-        this.addNewWorker(building);
-        this.map[index].setFree(false);
-        this.map[index].setObject(building);
-        delete this.map[index];
-        this.map[index] = building;
-        this.buy(target);
         this.socket.emit('game_addNewBuilding', {
-            x: position.x,
-            y: position.y,
             id: this.player.id,
+            position: {
+                x: position.x,
+                y: position.y,
+            },
             target: target
         });
     }
 };
 
 Game.prototype.__addNewBuilding = function(response) {
-    
+    const index = response.position.x*this.config.width + response.position.y;
+    const building = this.getBuilding(response.position, response.target, response.color);
+    this.addNewWorker(building);
+    this.map[index].setFree(false);
+    this.map[index].setObject(building);
+    delete this.map[index];
+    this.map[index] = building;
 };
 
 Game.prototype.addNewWorker = function(object) {
@@ -165,19 +103,19 @@ Game.prototype.addNewWorker = function(object) {
         else if(object.name == 'Quarry') key = 'stone';
         this.player.workers[`${key}`]++;
     }
-    this.player.printStats();
-    object.gameObject.click();
+    this.socket.emit('game_addNewWorker', {
+        id: this.player.id,
+        object: object
+    });
 };
 
-
-
-Game.prototype.getBuilding = function(position, target) {
+Game.prototype.getBuilding = function(position, target, color) {
     let config = { 
         x: position.x, 
         y: position.y, 
         size: this.config.areaSize, 
         game: this, 
-        color: this.player.getColor()
+        color: color
     };
     let building;
     if(target == 'tower') building = new Tower(config);
@@ -199,12 +137,4 @@ Game.prototype.canBuy = function(target) {
         }
     });
     return buy;
-};
-
-Game.prototype.buy = function(target) {
-    Object.entries(this.player.stats).forEach(entry => {
-        const [key, value] = entry;
-        this.player.stats[key] -= this.cost[`${target}`].costs[key];
-    });
-    this.player.printStats();
 };

@@ -29,5 +29,6 @@ Business.prototype.showOptions = function(res) {
     `;
     document.querySelector('#addWorker').onclick = () => {
         this.game.addNewWorker(this);
+        this.gameObject.click();
     }
 }

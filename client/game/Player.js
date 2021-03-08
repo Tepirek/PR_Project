@@ -1,19 +1,8 @@
 class Player {
     constructor(sock) {
         this.gameObjects = new Array();
-        this.stats = {
-            gold: 101,
-            wood: 6,
-            stone: 6,
-            food: 500,
-        };
-        
-        this.workers = {
-            gold: 0,
-            wood: 0,
-            stone: 0,
-            food: 0
-        };
+        this.stats = {};
+        this.workers = {};
         this.socket = sock;
         this.socket.on('player_init', (response) => {
             this.init(response);
@@ -43,10 +32,11 @@ Player.prototype.getColor = function() {
 }
 
 Player.prototype.init = function(response) {
-    console.log(response);
     this.id = response.id;
     this.username = response.username;
     this.color = response.color;
+    this.stats = response.stats;
+    this.workers = response.workers;
     const tower = this.createBuilding('Tower');
     const mine = this.createBuilding('Mine');
     const sawmill = this.createBuilding('Sawmill');
@@ -83,19 +73,14 @@ Player.prototype.printStats = function() {
                 ${this.stats.food} (+${this.workers.food})
             </span>
             </li>
-            Force limit 
-            <span id="force_limit">
-                ${this.stats.food} 
+            <li>
+                Army
+            <span id="army">
+                ${this.stats.army}
             </span>
             </li>
         </ul>
     `;
-};
-
-Player.prototype.addToStats = function() {
-    Object.keys(this.stats).forEach(key => {
-        this.stats[key] += this.workers[key];
-    });
 };
 
 Player.prototype.getStats = function() {

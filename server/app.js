@@ -1,11 +1,11 @@
 const http = require('http');
 const express = require('express');
 const socketio = require('socket.io');
-const { getUnpackedSettings } = require('http2');
 
+const { gameParams, baseLocations, buildingCosts, playerParams } = require('./config');
+const { Game } = require('./Game');
+const { Player } = require('./Player');
 const tools = require('./functions');
-
-const { test, Chat } = require('./Chat');
 
 const app = express();
 
@@ -14,36 +14,26 @@ app.use(express.static(`${__dirname}/../client`));
 const server = http.createServer(app);
 const io = socketio(server);
 
-let gameParams = {
-    config: {
-        areaSize: 24,
-        width: 64,
-        height: 32
-    }
-};
-
+const DEBUG = true;
 let messages = Array();
-let players = Array();
 let lobby = Array();
-let index = 1;
-let lobbyParams = {
-    maxPlayers: 1,
-    timeout: 1000
-};
+
+const game = new Game(io, gameParams);
 
 io.on('connection', (sock) => {
-    console.log(`Someone connected! ${sock.id}`);
-
     sock.on('lobby_join', (name) => {
-        sock.join('lobby');
-        console.log(`${name} entered the lobby!`);
-        players[`${sock.id}`] = {
-            id: sock.id,
-            username: name,
-            color: index
+        const index = lobby.length + 1;
+        const initialBaseLocation = {
+            x: baseLocations[index].x,
+            y: baseLocations[index].y
         };
-        index++;
-        console.log(players[sock.id]);
+        const player = new Player(
+            sock.id,
+            name,
+            index,
+            playerParams,
+            initialBaseLocation
+        );
         const data = {
             id: sock.id,
             user: name,
@@ -51,36 +41,22 @@ io.on('connection', (sock) => {
         };
         lobby.push(data);
         sock.emit('lobby_connected', data);
-        io.to('lobby').emit('lobby_Players', lobby);
-        if(lobby.length == lobbyParams.maxPlayers) {
-            console.log('Game init');
-            console.log(players);
-            io.emit('game_prepare', 'abc');
-
-            // GAME INIT
-            let map = Array();
-            for(let i = 0; i < 32; i++) {
-                for(let j = 0; j < 64; j++) {
-                    map[i*64 + j] = 0;
-                }
-            }
-            map[65] = 1;
-            gameParams.map = map;
-            console.log(gameParams);
-
-            setTimeout(() => {
-                Object.values(players).forEach(player => {
-                    console.log(player);
-                    io.to(player.id).emit('player_init', players[player.id]);
-                });
-                io.emit('game_init', gameParams);
-            }, lobbyParams.timeout);
+        io.emit('lobby_Players', lobby);
+        game.addNewPlayer(player);
+        if(lobby.length == game.maxPlayers) {
+            io.emit('game_prepare', {});
+            game.init();
+            game.update();
         }
     });
 
     // GAME EVENTS
     sock.on('game_addNewBuilding', (request) => {
-        io.emit('game_addNewBuilding', request);
+        game.__addNewBuilding(request);
+    });
+
+    sock.on('game_addNewWorker', (request) => {
+        game.__addNewWorker(request);
     });
 
     // TODO: remove user data when disconnect
@@ -97,14 +73,14 @@ io.on('connection', (sock) => {
         const message = { 
             date: tools.getDate(), 
             text: msg,
-            author: players[sock.id].username
+            author: game.getPlayer(sock.id).username
         };
         messages.push(message);
         io.emit('message', message);
     });
 
     sock.on('initChat', () => {
-        sock.emit('message', {date: tools.getDate(), text: `Witaj! Połączono jako <span style="color:#1be393">${players[sock.id].username}</span>`});
+        sock.emit('message', {date: tools.getDate(), text: `Witaj! Połączono jako <span style="color:#1be393">${game.getPlayer(sock.id).username}</span>`});
         messages.forEach(message => {
             sock.emit('message', message);
         });
