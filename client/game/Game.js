@@ -78,7 +78,8 @@ Game.prototype.addNewBuilding = function(position, target) {
 Game.prototype.__addNewBuilding = function(response) {
     const index = response.position.x*this.config.width + response.position.y;
     const building = this.getBuilding(response.position, response.target, response.color);
-    this.addNewWorker(building);
+    // TODO: żeby kurwa nie dawało workersów każdemu za darmo xD
+    if(this.player.color == response.color) this.addNewWorker(building);
     this.map[index].setFree(false);
     this.map[index].setObject(building);
     delete this.map[index];
@@ -93,15 +94,6 @@ Game.prototype.addNewWorker = function(object) {
         }
     } else if(this.player.stats.food >= 25 && object.workers + 1 <= object.capacity) {
         object.workers++;
-        this.player.stats.food -= 25;
-        // TODO: dodawanie surowców za pracowników
-        this.player.workers[`${object.name.toLowerCase()}`]++;
-        let key = '';
-        if(object.name == 'Farm') key = 'food';
-        else if(object.name == 'Sawmill') key = 'wood';
-        else if(object.name == 'Mine') key = 'gold';
-        else if(object.name == 'Quarry') key = 'stone';
-        this.player.workers[`${key}`]++;
     }
     this.socket.emit('game_addNewWorker', {
         id: this.player.id,

@@ -59,16 +59,6 @@ io.on('connection', (sock) => {
         game.__addNewWorker(request);
     });
 
-    // TODO: remove user data when disconnect
-    sock.on('disconnect', (sock) => {
-        index = 1;
-        lobby = lobby.filter(obj => {
-            if(Object.keys(io.engine.clients).includes(obj.id)) return true;
-            else return false;
-        });
-        // io.emit('lobby_Players', lobby);
-    });
-
     sock.on('message', (msg) => {
         const message = { 
             date: tools.getDate(), 

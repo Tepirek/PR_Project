@@ -1,5 +1,5 @@
 const gameParams = {
-    maxPlayers: 1,
+    maxPlayers: 2,
     config: {
         areaSize: 24,
         width: 64,

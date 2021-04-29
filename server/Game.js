@@ -59,6 +59,7 @@ Game.prototype.__addNewBuilding = function(request) {
 Game.prototype.__addNewWorker = function(request) {
     let player = this.getPlayer(request.id);
     const target = String(request.object.name).toLowerCase();
+    if(target == 'base') return;
     if(this.canBuy(player, this.costs[`${target}`].worker)) {
         let key = '';
         if(target == 'farm') key = 'food';
